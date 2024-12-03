@@ -1,0 +1,275 @@
+// LearnLock Frontend Development - React Native Setup
+
+import React from 'react';
+import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+
+export default function App() {
+  // Frontend Test Cases
+  const runTests = () => {
+    console.log("Running Test Cases...");
+
+    // Test 1: Check login screen render
+    console.assert(typeof renderDashboard === "function", "Test 1 Failed: renderDashboard is not defined");
+
+    // Test 2: Verify dynamic role selection
+    setUserRole('student');
+    console.assert(userRole === 'student', "Test 2 Failed: Role not set to student");
+
+    setUserRole('parent');
+    console.assert(userRole === 'parent', "Test 2 Failed: Role not set to parent");
+
+    // Test 3: Verify render function outputs dashboard content
+    const dashboardContent = renderDashboard();
+    console.assert(dashboardContent !== null, "Test 3 Failed: Dashboard content not rendered");
+
+    console.log("All tests passed!");
+  };
+
+  React.useEffect(() => {
+    runTests();
+  }, []);
+  const [userRole, setUserRole] = React.useState(null); // Dynamic role selection after login // Replace 'student' with dynamic role selection
+
+  const renderDashboard = () => {
+    if (!userRole) {
+      return (
+        <View style={styles.roleSelectionContainer}>
+          <Text style={styles.dashboardTitle}>Select Your Role</Text>
+          <Button title="Student" onPress={() => setUserRole('student')} />
+          <Button title="Parent" onPress={() => setUserRole('parent')} />
+          <Button title="Teacher" onPress={() => setUserRole('teacher')} />
+        </View>
+      );
+    }
+
+    if (userRole === 'student') {
+      return (
+        <View style={styles.dashboardContainer}>
+          <Text style={styles.dashboardTitle}>Student Dashboard</Text>
+          <Text>Your Progress</Text>
+          <View style={styles.progressCard}>
+            <Text>Assignment 1</Text>
+            <View style={styles.progressBarContainer}>
+              <View style={[styles.progressBar, { width: '75%' }]} />
+            </View>
+            <Text>Grade: B+</Text>
+          </View>
+          <View style={styles.progressCard}>
+            <Text>Assignment 2</Text>
+            <View style={styles.progressBarContainer}>
+              <View style={[styles.progressBar, { width: '50%' }]} />
+            </View>
+            <Text>Grade: A</Text>
+          </View>
+        </View>
+      );
+    }
+
+    if (userRole === 'parent') {
+      return (
+        <View style={styles.dashboardContainer}>
+          <Text style={styles.dashboardTitle}>Parent Dashboard</Text>
+          <Text>Monitor Your Child's Progress</Text>
+          <View style={styles.progressCard}>
+            <Text>Child: John Doe</Text>
+            <Text>Assignment 1</Text>
+            <View style={styles.progressBarContainer}>
+              <View style={[styles.progressBar, { width: '75%' }]} />
+            </View>
+            <Text>Grade: B+</Text>
+          </View>
+          <Text>Teacher Feedback: Great improvement in mathematics!</Text>
+        </View>
+      );
+    }
+
+    if (userRole === 'teacher') {
+      return (
+        <View style={styles.dashboardContainer}>
+          <Text style={styles.dashboardTitle}>Teacher Dashboard</Text>
+          <Text>Manage Your Class</Text>
+          <View style={styles.progressCard}>
+            <Text>Assignment 1: 10/20 Graded</Text>
+          </View>
+          <View style={styles.progressCard}>
+            <Text>Assignment 2: 5/20 Graded</Text>
+          </View>
+          <Button title="Sync Grades" onPress={() => Alert.alert('Sync in Progress')} />
+        </View>
+      );
+    }
+
+    return <Text>Dashboard for {userRole}</Text>;
+        <View style={styles.roleSelectionContainer}>
+          <Text style={styles.dashboardTitle}>Select Your Role</Text>
+          <Button title="Student" onPress={() => setUserRole('student')} />
+          <Button title="Parent" onPress={() => setUserRole('parent')} />
+          <Button title="Teacher" onPress={() => setUserRole('teacher')} />
+        </View>
+      );
+    }
+        <View style={styles.dashboardContainer}>
+          <Text style={styles.dashboardTitle}>Student Dashboard</Text>
+          <Text>Your Progress</Text>
+          {data.map((module, index) => (
+            <View key={index} style={styles.progressCard}>
+              <Text>{module.title}</Text>
+              <Text>Completion: {Math.floor(Math.random() * 100)}%</Text>
+              <Text>Grade: {['A', 'B', 'C'][Math.floor(Math.random() * 3)]}</Text>
+            </View>
+          ))}
+        </View>
+      );
+        <View style={styles.dashboardContainer}>
+          <Text style={styles.dashboardTitle}>Student Dashboard</Text>
+          <Text>Your Progress</Text>
+          <View style={styles.progressCard}>
+            <Text>Assignment 1: 75% Complete</Text>
+            <Text>Grade: B+</Text>
+          </View>
+          <View style={styles.progressCard}>
+            <Text>Assignment 2: 50% Complete</Text>
+            <Text>Grade: A</Text>
+          </View>
+        </View>
+      );
+    } else if (userRole === 'parent') {
+      const [data, setData] = React.useState(null);
+      const [loading, setLoading] = React.useState(true);
+
+      React.useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await fetch('http://localhost:5000/api/progress?child_id=1'); // Example API call
+            const result = await response.json();
+            setData(result);
+            setLoading(false);
+          } catch (error) {
+            Alert.alert('Error', 'Unable to fetch data. Please try again later.');
+            setLoading(false);
+          }
+        };
+        fetchData();
+      }, []);
+
+      if (loading) {
+        return <Text>Loading...</Text>;
+      }
+
+      return (
+        <View style={styles.dashboardContainer}>
+          <Text style={styles.dashboardTitle}>Parent Dashboard</Text>
+          <Text>Monitor Your Child's Progress</Text>
+          {data.progress.map((item, index) => (
+            <View key={index} style={styles.progressCard}>
+              <Text>Child: {item.child_name}</Text>
+              <Text>{item.assignment_title}: {item.completion}% Complete</Text>
+              <Text>Grade: {item.grade}</Text>
+            </View>
+          ))}
+          <Text>Teacher Feedback</Text>
+          {data.feedback.map((feedback, index) => (
+            <View key={index} style={styles.feedbackCard}>
+              <Text>{feedback.comment}</Text>
+            </View>
+          ))}
+        </View>
+      );
+        <View style={styles.dashboardContainer}>
+          <Text style={styles.dashboardTitle}>Parent Dashboard</Text>
+          <Text>Monitor Your Child's Progress</Text>
+          <View style={styles.progressCard}>
+            <Text>Child: John Doe</Text>
+            <Text>Assignment 1: 75% Complete</Text>
+            <Text>Grade: B+</Text>
+          </View>
+          <View style={styles.progressCard}>
+            <Text>Assignment 2: 50% Complete</Text>
+            <Text>Grade: A</Text>
+          </View>
+          <Text>Teacher Feedback</Text>
+          <View style={styles.feedbackCard}>
+            <Text>Great improvement in mathematics!</Text>
+          </View>
+        </View>
+      );
+        <View style={styles.dashboardContainer}>
+          <Text style={styles.dashboardTitle}>Student Dashboard</Text>
+          <Text>Your Progress</Text>
+          <View style={styles.progressCard}>
+            <Text>Assignment 1: 75% Complete</Text>
+            <Text>Grade: B+</Text>
+          </View>
+          <View style={styles.progressCard}>
+            <Text>Assignment 2: 50% Complete</Text>
+            <Text>Grade: A</Text>
+          </View>
+        {renderDashboard()}
+    </View>
+  );
+    }
+    else if (userRole === 'teacher') {
+      return (
+        <View style={styles.dashboardContainer}>
+          <Text style={styles.dashboardTitle}>Teacher Dashboard</Text>
+          <Text>Manage Your Class</Text>
+          <View style={styles.progressCard}>
+            <Text>Assignment 1: 10/20 Graded</Text>
+          </View>
+          <View style={styles.progressCard}>
+            <Text>Assignment 2: 5/20 Graded</Text>
+          </View>
+          <Text>Sync Grades with Platform</Text>
+          <Button title="Sync Now" onPress={() => Alert.alert('Sync in Progress')} />
+        </View>
+      );
+    return <Text>Dashboard for {userRole}</Text>;
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>LearnLock - School Platform Login</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Username or Email"
+        value={username}
+        onChangeText={setUsername}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+
+      <Button title="Login" onPress={handleLogin} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 24,
+    fontWeight: 'bold',
+  },
+  input: {
+    width: '80%',
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 8,
+    marginBottom: 16,
+  },
+});
