@@ -1,0 +1,33 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button } from 'react-native';
+import axios from 'axios';
+
+const AuthScreen = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSignup = async () => {
+    try {
+      const response = await axios.post('http://your-backend-url/api/signup/', {
+        username,
+        password,
+      });
+      setMessage(response.data.message);
+    } catch (error) {
+      setMessage('Signup failed. Please try again.');
+    }
+  };
+
+  return (
+    <View>
+      <Text>Sign Up</Text>
+      <TextInput placeholder="Username" onChangeText={setUsername} />
+      <TextInput placeholder="Password" secureTextEntry onChangeText={setPassword} />
+      <Button title="Sign Up" onPress={handleSignup} />
+      {message ? <Text>{message}</Text> : null}
+    </View>
+  );
+};
+
+export default AuthScreen;
